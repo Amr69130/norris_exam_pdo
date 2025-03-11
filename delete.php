@@ -46,7 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <form method="POST" action="delete.php?id=<?= $_GET['id'] ?>">
     <button class="btn btn-danger">SUPPRIMER</button>
-    <button class="btn btn-secondary" formaction="index.php">ANNULER</button>
+    <button class="btn btn-secondary" formaction="admin.php">ANNULER</button>
 </form>
 
 
