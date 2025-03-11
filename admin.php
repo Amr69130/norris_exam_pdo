@@ -20,7 +20,7 @@ $cars = $requete->fetchAll();
 </div>
 
 
-<div class="car-container">
+<div class="cars-container">
     <?php
 
     foreach ($cars as $car): ?>

@@ -14,7 +14,7 @@ include_once('header.php'); ?>
 <!-- <a href="login.php" class="btn btn-success">SE CONNECTER</a> -->
 
 
-<div class="car-container">
+<div class="cars-container">
     <?php
 
     foreach ($cars as $car): ?>

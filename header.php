@@ -20,9 +20,6 @@ session_start();
 <body>
 
     <header>
-
-
-
         <?php
         //declaration en variable pour faciliter affichage des login/logout
         $btn_login = '<a href="login.php" class="btn btn-success">SE CONNECTER</a>';
