@@ -1,3 +1,14 @@
+@keyframes gradientMove {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
 html {
   margin: 0;
   padding: 0;
@@ -16,6 +27,22 @@ body {
       font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS",
         sans-serif;
     }
+  }
+
+  .animated-gradient-text {
+    background: linear-gradient(
+      45deg,
+      #ff0000,
+      #fffb00,
+      rgb(255, 255, 255),
+      #8000ff,
+      #0539c7
+    );
+    background-size: 300% 300%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: gradientMove 5s infinite alternate;
   }
 
   .cars-container {

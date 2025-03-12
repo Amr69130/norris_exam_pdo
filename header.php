@@ -37,5 +37,5 @@ session_start();
             }
             ?>
         </div>
-        <h1 class="fw-bold text-center">LE GARAGE DE FIRMINY</h1>
+        <h1 class="text-center animated-gradient-text">LE GARAGE DE FIRMINY</h1>
     </header>
