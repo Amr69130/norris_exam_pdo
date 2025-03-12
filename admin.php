@@ -10,9 +10,7 @@ $pdo = connectDB();
 // var_dump($pdo);
 selectAllCars();
 $cars = selectAllCars();
-// $requete = $pdo->prepare("SELECT * FROM car;");
-// $requete->execute();
-// $cars = $requete->fetchAll();
+
 
 ?>
 <div>

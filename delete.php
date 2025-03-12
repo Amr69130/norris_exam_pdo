@@ -3,22 +3,18 @@
 include_once('header.php');
 require_once('functions.php');
 verifySession();
-//verif presence ID url
+
 // var_dump($_GET['id']);
 
 
 require('connectDB.php');
 
 //Recup en bdd des données grâce à leur ID
-selectCarByID();
-// $pdo = connectDB();
-// $requete = $pdo->prepare("SELECT * FROM car WHERE id = :id;");
-// $requete->execute([
-//     'id' => $_GET['id']
-// ]);
 
-$car = $requete->fetch();
-//verif  si resultat
+
+
+$car = selectCarByID($_GET['id']);
+
 // var_dump($car);
 if ($car === false) {
 
@@ -29,13 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 
 
-    // $requestDelete = $pdo->prepare("DELETE FROM car WHERE id = :id;");
-    // $requestDelete->execute(
-    //     [
-    //         ":id" => $car['id']
-    //     ]
-    // );
-    deleteCar();
+    deleteCar($_GET['id']);
     header('location: admin.php');
 }
 

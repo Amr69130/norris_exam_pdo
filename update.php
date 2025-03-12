@@ -9,7 +9,7 @@ $pdo = connectDB();
 
 
 
-// $car = $requete->fetch();
+
 $car = selectCarByID($_GET['id']);
 
 if ($car === false) {
@@ -36,7 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Vérification de l'image
     if (!isset($_FILES['image']) || $_FILES['image']['error'] !== 0) {
         // Si l'image n'est pas modifiée
-        $image_url = $car['image'];  // L'image actuelle de la voiture reste inchangée
+        $imageUrl = $car['image'];  // L'image actuelle de la voiture reste inchangée
     } else {
         // Si une nouvelle image est téléchargée
         if ($_FILES['image']['size'] > 5000000) { // Limite à 5MB
@@ -50,8 +50,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $errors['image'] = 'Seuls les fichiers JPG, JPEG, GIF et PNG sont acceptés.';
             } else {
                 // Générer un nouveau nom unique pour l'image
-                $image_url = uniqid() . '.' . $extension;
-                move_uploaded_file($_FILES['image']['tmp_name'], 'images/' . $image_url);
+                $imageUrl = uniqid() . '.' . $extension;
+                move_uploaded_file($_FILES['image']['tmp_name'], 'images/' . $imageUrl);
                 unlink("images/" . $car["image"]);  // Supprimer l'ancienne image si elle est modifiée
             }
         }
@@ -59,15 +59,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Si pas d'erreurs, mettre à jour la voiture dans la base de données
     if (empty($errors)) {
-        updateCar();
-        // $request = $pdo->prepare("UPDATE car SET model = :model, brand = :brand, horsePower = :horsePower, image = :image WHERE id = :id;");
-        // $request->execute([
-        //     ":model" => $_POST['model'],
-        //     ":brand" => $_POST['brand'],
-        //     ":horsePower" => $_POST['horsePower'],
-        //     ":image" => $image_url,
-        //     ":id" => $car['id']
-        // ]);
+        updateCar($_GET['id'], $_POST, $imageUrl);
+
 
         header("Location: admin.php");
         exit();

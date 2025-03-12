@@ -24,6 +24,7 @@ function selectCarByID($carId)
 ;
 function insertCar($car, $imageUrl)
 {
+
     $pdo = connectDB();
     $request = $pdo->prepare("INSERT INTO car (model, brand, horsePower, image) 
     VALUES (:model, :brand, :horsePower, :image)");
@@ -35,7 +36,7 @@ function insertCar($car, $imageUrl)
     ]);
 }
 ;
-function updateCar($car, $imageUrl)
+function updateCar($id, $car, $imageUrl)
 {
     $pdo = connectDB();
     $request = $pdo->prepare("UPDATE car SET model = :model, brand = :brand, horsePower = :horsePower, image = :image WHERE id = :id;");
@@ -44,19 +45,19 @@ function updateCar($car, $imageUrl)
         ":brand" => $car['brand'],
         ":horsePower" => $car['horsePower'],
         ":image" => $imageUrl,
-        ":id" => $car['id']
+        ":id" => $id
     ]);
 }
 ;
 
 
-function deleteCar($car)
+function deleteCar($id)
 {
     $pdo = connectDB();
     $requestDelete = $pdo->prepare("DELETE FROM car WHERE id = :id;");
     $requestDelete->execute(
         [
-            ":id" => $car['id']
+            ":id" => $id
         ]
     );
 }

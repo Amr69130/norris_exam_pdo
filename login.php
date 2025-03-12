@@ -7,9 +7,7 @@ if (isset($_SESSION["username"])) {
     header("location: admin.php");
 }
 ;
-// var_dump($_SESSION);
-// $pass = password_hash("admin", PASSWORD_DEFAULT);
-// var_dump($pass)
+
 ?>
 
 <?php
@@ -37,8 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         ]);
 
         $user = $request->fetch();
-        //verif  si resultat
-        // var_dump($user);
+
         if ($user === false) {
             echo ('USER OU MDP INEXISTANT !! ');
         } else {

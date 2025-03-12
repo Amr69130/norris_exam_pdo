@@ -13,7 +13,7 @@ $cars = selectAllCars();
 
 include_once('header.php'); ?>
 
-<!-- <a href="login.php" class="btn btn-success">SE CONNECTER</a> -->
+
 
 
 <div class="cars-container">

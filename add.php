@@ -2,10 +2,7 @@
 include_once('header.php');
 require_once('functions.php');
 verifySession();
-// if (!isset($_SESSION["username"])) {
-//     header("Location: index.php");
-//     exit();
-// }
+
 
 $errors = [];
 
@@ -13,7 +10,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     require('connectDB.php');
     $pdo = connectDB();
 
-    // Vérification des champs texte
+
     if (empty($_POST['brand'])) {
         $errors['brand'] = 'Le champ marque ne peut pas être vide.';
     }
@@ -26,16 +23,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $errors['horsePower'] = 'Le champ nombre de chevaux ne peut pas être vide.';
     }
 
-    // Vérification de l'image
+
     if (empty($_FILES['image']['name'])) {
         $errors['image'] = 'Le champ image ne peut pas être vide.';
     } else {
         if ($_FILES['image']['error'] !== 0) {
             $errors['image'] = 'Une erreur est survenue lors de l\'upload de l\'image.';
-        } elseif ($_FILES['image']['size'] > 5000000) { // Limite à 5MB
+        } elseif ($_FILES['image']['size'] > 5000000) {
             $errors['image'] = 'Le fichier est trop lourd (5MB max).';
         } else {
-            // Vérifier l'extension du fichier
+
             $file_info = pathinfo($_FILES['image']['name']);
             $extension = strtolower($file_info['extension']);
             $allowed_extensions = ['jpg', 'jpeg', 'gif', 'png'];
@@ -46,18 +43,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
-    // Si pas d'erreurs, procéder à l'upload et insertion
+
     if (empty($errors)) {
-        // Générer un nom unique pour l'image
+
         $imageUrl = uniqid() . '.' . $extension;
         move_uploaded_file($_FILES['image']['tmp_name'], 'images/' . $imageUrl);
 
-        // Insérer dans la base de données
 
-        insertCar($car, $imageUrl);
+
+        insertCar($_POST, $imageUrl);
 
         header("Location: admin.php");
-        exit(); // Terminer l'exécution du script après la redirection
+        // exit();
     }
 }
 ?>
