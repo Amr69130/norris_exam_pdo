@@ -1,9 +1,11 @@
 <?php
 include_once('header.php');
-if (!isset($_SESSION["username"])) {
-    header("Location: index.php");
-    exit();
-}
+require_once('functions.php');
+verifySession();
+// if (!isset($_SESSION["username"])) {
+//     header("Location: index.php");
+//     exit();
+// }
 
 $errors = [];
 
