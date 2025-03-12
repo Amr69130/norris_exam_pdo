@@ -49,18 +49,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Si pas d'erreurs, procéder à l'upload et insertion
     if (empty($errors)) {
         // Générer un nom unique pour l'image
-        $image_url = uniqid() . '.' . $extension;
-        move_uploaded_file($_FILES['image']['tmp_name'], 'images/' . $image_url);
+        $imageUrl = uniqid() . '.' . $extension;
+        move_uploaded_file($_FILES['image']['tmp_name'], 'images/' . $imageUrl);
 
         // Insérer dans la base de données
-        $request = $pdo->prepare("INSERT INTO car (model, brand, horsePower, image) 
-                                  VALUES (:model, :brand, :horsePower, :image)");
-        $request->execute([
-            ":model" => $_POST['model'],
-            ":brand" => $_POST['brand'],
-            ":horsePower" => $_POST['horsePower'],
-            ":image" => $image_url,
-        ]);
+
+        insertCar($car, $imageUrl);
 
         header("Location: admin.php");
         exit(); // Terminer l'exécution du script après la redirection

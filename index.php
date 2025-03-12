@@ -1,13 +1,15 @@
 <?php
 include_once('header.php');
-require_once('connectDB.php');
+// require_once('connectDB.php');
+require_once('functions.php');
+require('connectDB.php');
 
 $pdo = connectDB();
-// var_dump($pdo);
+var_dump($pdo);
 
-$requete = $pdo->prepare("SELECT * FROM car;");
-$requete->execute();
-$cars = $requete->fetchAll();
+selectAllCars();
+$cars = selectAllCars();
+
 
 include_once('header.php'); ?>
 
@@ -17,7 +19,9 @@ include_once('header.php'); ?>
 <div class="cars-container">
     <?php
 
-    foreach ($cars as $car): ?>
+    foreach ($cars as $car):
+
+        ?>
 
         <div>
             <ul>

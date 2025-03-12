@@ -8,10 +8,11 @@ verifySession();
 
 $pdo = connectDB();
 // var_dump($pdo);
-
-$requete = $pdo->prepare("SELECT * FROM car;");
-$requete->execute();
-$cars = $requete->fetchAll();
+selectAllCars();
+$cars = selectAllCars();
+// $requete = $pdo->prepare("SELECT * FROM car;");
+// $requete->execute();
+// $cars = $requete->fetchAll();
 
 ?>
 <div>

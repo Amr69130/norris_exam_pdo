@@ -6,12 +6,11 @@ verifySession();
 // Récupérer les données de la voiture en fonction de l'ID
 require('connectDB.php');
 $pdo = connectDB();
-$requete = $pdo->prepare("SELECT * FROM car WHERE id = :id;");
-$requete->execute([
-    'id' => $_GET['id']
-]);
 
-$car = $requete->fetch();
+
+
+// $car = $requete->fetch();
+$car = selectCarByID($_GET['id']);
 
 if ($car === false) {
     header('Location: admin.php');
@@ -60,14 +59,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Si pas d'erreurs, mettre à jour la voiture dans la base de données
     if (empty($errors)) {
-        $request = $pdo->prepare("UPDATE car SET model = :model, brand = :brand, horsePower = :horsePower, image = :image WHERE id = :id;");
-        $request->execute([
-            ":model" => $_POST['model'],
-            ":brand" => $_POST['brand'],
-            ":horsePower" => $_POST['horsePower'],
-            ":image" => $image_url,
-            ":id" => $car['id']
-        ]);
+        updateCar();
+        // $request = $pdo->prepare("UPDATE car SET model = :model, brand = :brand, horsePower = :horsePower, image = :image WHERE id = :id;");
+        // $request->execute([
+        //     ":model" => $_POST['model'],
+        //     ":brand" => $_POST['brand'],
+        //     ":horsePower" => $_POST['horsePower'],
+        //     ":image" => $image_url,
+        //     ":id" => $car['id']
+        // ]);
 
         header("Location: admin.php");
         exit();

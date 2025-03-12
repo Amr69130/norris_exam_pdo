@@ -10,12 +10,12 @@ verifySession();
 require('connectDB.php');
 
 //Recup en bdd des données grâce à leur ID
-
-$pdo = connectDB();
-$requete = $pdo->prepare("SELECT * FROM car WHERE id = :id;");
-$requete->execute([
-    'id' => $_GET['id']
-]);
+selectCarByID();
+// $pdo = connectDB();
+// $requete = $pdo->prepare("SELECT * FROM car WHERE id = :id;");
+// $requete->execute([
+//     'id' => $_GET['id']
+// ]);
 
 $car = $requete->fetch();
 //verif  si resultat
