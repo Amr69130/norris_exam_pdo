@@ -4,13 +4,7 @@ if (!isset($_SESSION["username"])) {
     header("Location: index.php");
 }
 
-//verif presence ID url
-
-// var_dump($_GET['id']);
-
-
-
-//Recup en bdd des données grâce à leur ID
+// Récupérer les données de la voiture en fonction de l'ID
 require('connectDB.php');
 $pdo = connectDB();
 $requete = $pdo->prepare("SELECT * FROM car WHERE id = :id;");
@@ -19,145 +13,117 @@ $requete->execute([
 ]);
 
 $car = $requete->fetch();
-//verif  si resultat
-// var_dump($car);
-if ($car === false) {
 
-    header('location: admin.php');
+if ($car === false) {
+    header('Location: admin.php');
+    exit();
 }
+
 $errors = [];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
-
+    // Vérification des champs texte
     if (empty($_POST['brand'])) {
         $errors['brand'] = 'Le champ marque ne peut pas être vide.';
     }
 
     if (empty($_POST['model'])) {
-        $errors['model'] = 'Le champ model ne peut pas être vide.';
+        $errors['model'] = 'Le champ modèle ne peut pas être vide.';
     }
+
     if (empty($_POST['horsePower'])) {
         $errors['horsePower'] = 'Le champ nombre de chevaux ne peut pas être vide.';
     }
-    if (empty($_POST['image'])) {
-        $errors['image'] = 'Le champ image ne peut pas être vide.';
-    }
 
+    // Vérification de l'image
+    if (!isset($_FILES['image']) || $_FILES['image']['error'] !== 0) {
+        // Si l'image n'est pas modifiée
+        $image_url = $car['image'];  // L'image actuelle de la voiture reste inchangée
+    } else {
+        // Si une nouvelle image est téléchargée
+        if ($_FILES['image']['size'] > 5000000) { // Limite à 5MB
+            $errors['image'] = 'Le fichier est trop lourd (5MB max).';
+        } else {
+            $file_info = pathinfo($_FILES['image']['name']);
+            $extension = strtolower($file_info['extension']);
+            $allowed_extensions = ['jpg', 'jpeg', 'gif', 'png'];
 
-
-    if (empty($errors)) {
-        if (isset($_FILES["image"])) {
-            if ($_FILES['image']['error'] == 0) {
-
-
-                // Etape 2
-                if ($_FILES['image']['size'] <= 100000000) {
-                    //Etape 3
-
-                    $extensions_autorisees = array('image/jpg', 'image/jpeg', 'image/gif', 'image/png');
-                    $extension = $_FILES['image']['type'];
-                    if (in_array($extension, $extensions_autorisees)) {
-                        //Etape 4
-                        $image_url = uniqid() . $_FILES['image']['name'];
-                        move_uploaded_file($_FILES['image']['tmp_name'], 'img/' . $image_url);
-
-                        unlink("img/" . $car["image"]);
-                        $request = $pdo->prepare("UPDATE car SET model = :model, brand = :brand, horsePower = :horsePower, image = :image WHERE id = :id;");
-
-                        var_dump($_POST);
-                        $request->execute([
-                            ":model" => $_POST['model'],
-                            ":brand" => $_POST['brand'],
-                            ":horsePower" => $_POST['horsePower'],
-                            ":image" => $_POST['image'],
-                            ":id" => $car['id']
-                        ]);
-                        echo "L'envoi a bien été effectué !";
-                    } else {
-                        echo ('J\'accepte que les jpg, jpeg, gif, png');
-                    }
-                } else {
-                    echo ('le fichier est trop lourd 1MB max');
-                }
+            if (!in_array($extension, $allowed_extensions)) {
+                $errors['image'] = 'Seuls les fichiers JPG, JPEG, GIF et PNG sont acceptés.';
+            } else {
+                // Générer un nouveau nom unique pour l'image
+                $image_url = uniqid() . '.' . $extension;
+                move_uploaded_file($_FILES['image']['tmp_name'], 'images/' . $image_url);
+                unlink("images/" . $car["image"]);  // Supprimer l'ancienne image si elle est modifiée
             }
         }
-        // var_dump('okay');
-        header("location: admin.php");
     }
 
+    // Si pas d'erreurs, mettre à jour la voiture dans la base de données
+    if (empty($errors)) {
+        $request = $pdo->prepare("UPDATE car SET model = :model, brand = :brand, horsePower = :horsePower, image = :image WHERE id = :id;");
+        $request->execute([
+            ":model" => $_POST['model'],
+            ":brand" => $_POST['brand'],
+            ":horsePower" => $_POST['horsePower'],
+            ":image" => $image_url,
+            ":id" => $car['id']
+        ]);
+
+        header("Location: admin.php");
+        exit();
+    }
 }
 ?>
 
-<?php
-require_once('header.php');
-// var_dump($_GET);
-
-?>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-
 
 <div class="container text-center">
     <h2 class="mb-4">Modifier une Voiture</h2>
     <form action="update.php?id=<?= $car['id'] ?>" method="POST" enctype="multipart/form-data">
 
-
         <div class="mb-3">
             <label for="brand" class="form-label">Marque</label>
-            <input type="text" class="form-control" name="brand" id="brand" value="<?= $car['brand'] ?>">
+            <input type="text" class="form-control" name="brand" id="brand" value="<?= $car['brand'] ?>"
+                placeholder="Ex: Toyota">
             <?php if (isset($errors['brand'])): ?>
                 <p class="text-danger"><?= $errors['brand'] ?></p>
-                <?php
-            endif;
-            // var_dump($errors['brand']);
-            ?>
+            <?php endif; ?>
         </div>
-
-
 
         <div class="mb-3">
             <label for="model" class="form-label">Modèle</label>
-            <input type="text" class="form-control" name="model" id="model" value="<?= $car['model'] ?>">
+            <input type="text" class="form-control" name="model" id="model" value="<?= $car['model'] ?>"
+                placeholder="Ex: Corolla">
             <?php if (isset($errors['model'])): ?>
                 <p class="text-danger"><?= $errors['model'] ?></p>
-                <?php
-            endif;
-            // var_dump($errors['model']);
-            ?>
+            <?php endif; ?>
         </div>
+
         <div class="mb-3">
             <label for="horsePower" class="form-label">Nombre de chevaux</label>
-            <input type="text" class="form-control" name="horsePower" id="horsePower" value="<?= $car['horsePower'] ?>">
+            <input type="text" class="form-control" name="horsePower" id="horsePower" value="<?= $car['horsePower'] ?>"
+                placeholder="Ex: 150">
             <?php if (isset($errors['horsePower'])): ?>
                 <p class="text-danger"><?= $errors['horsePower'] ?></p>
-                <?php
-            endif;
-            // var_dump($errors['horsePower']);
-            ?>
+            <?php endif; ?>
         </div>
+
         <div class="mb-3">
             <label for="image" class="form-label">Image du véhicule</label>
-
-
-
-
-            <input type="file" class="form-control" name="image" id="image" value="<?= $car['image'] ?>">
+            <input type="file" class="form-control" name="image" id="image">
             <?php if (isset($errors['image'])): ?>
                 <p class="text-danger"><?= $errors['image'] ?></p>
-                <?php
-            endif;
-            // var_dump($errors['image']);
-            ?>
-        </div>
-        <div class="mb-2">
+            <?php endif; ?>
 
+            <img src="images/<?= $car['image'] ?>" alt="<?= $car['model'] ?>" class="mt-3" width="150">
+        </div>
+
+        <div class="mb-2">
             <button type="submit" class="btn btn-primary">Modifier</button>
         </div>
-
 
     </form>
 </div>
 
-<?php
-include_once('footer.php');
-?>
+<?php include_once('footer.php'); ?>
