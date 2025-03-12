@@ -29,12 +29,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 
 
-    $requestDelete = $pdo->prepare("DELETE FROM car WHERE id = :id;");
-    $requestDelete->execute(
-        [
-            ":id" => $car['id']
-        ]
-    );
+    // $requestDelete = $pdo->prepare("DELETE FROM car WHERE id = :id;");
+    // $requestDelete->execute(
+    //     [
+    //         ":id" => $car['id']
+    //     ]
+    // );
+    deleteCar();
     header('location: admin.php');
 }
 

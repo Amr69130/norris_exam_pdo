@@ -8,6 +8,13 @@
 function deleteCar()
 {
 
+    $pdo = connectDB();
+    $requestDelete = $pdo->prepare("DELETE FROM car WHERE id = :id;");
+    $requestDelete->execute(
+        [
+            ":id" => $car['id']
+        ]
+    );
 }
 ;
 
