@@ -1,8 +1,7 @@
 <?php
 include_once('header.php');
-if (!isset($_SESSION["username"])) {
-    header("Location: index.php");
-}
+require_once('functions.php');
+verifySession();
 
 // Récupérer les données de la voiture en fonction de l'ID
 require('connectDB.php');

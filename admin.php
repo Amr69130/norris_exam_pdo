@@ -3,10 +3,9 @@
 include_once('header.php');
 require_once('connectDB.php');
 
-if (!isset($_SESSION["username"])) {
-    header("Location: index.php");
-}
-;
+require_once('functions.php');
+verifySession();
+
 $pdo = connectDB();
 // var_dump($pdo);
 

@@ -1,9 +1,8 @@
 <?php
 
 include_once('header.php');
-if (!isset($_SESSION["username"])) {
-    header("Location: index.php");
-}
+require_once('functions.php');
+verifySession();
 //verif presence ID url
 // var_dump($_GET['id']);
 
