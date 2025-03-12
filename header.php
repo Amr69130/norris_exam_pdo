@@ -30,7 +30,7 @@ session_start();
         <div class="text-end m-3">
             <?php
             if (isset($_SESSION["username"])) {
-                $welcome = "<p class='fw-bold text-white' >Bienvenue " . $_SESSION['username'] . "</p>";
+                $welcome = "<p class='fw-bold text-white' >Bienvenue " . ucwords(strtolower($_SESSION['username'])) . "</p>";
                 echo $welcome . $btn_logout;
             } else {
                 echo $btn_login;

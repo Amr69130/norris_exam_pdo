@@ -6,7 +6,7 @@ if (!isset($_SESSION["username"])) {
 
 //verif presence ID url
 
-var_dump($_GET['id']);
+// var_dump($_GET['id']);
 
 
 
@@ -20,7 +20,7 @@ $requete->execute([
 
 $car = $requete->fetch();
 //verif  si resultat
-var_dump($car);
+// var_dump($car);
 if ($car === false) {
 
     header('location: admin.php');
@@ -120,8 +120,15 @@ require_once('header.php');
             // var_dump($errors['image']);
             ?>
         </div>
-        <button type="submit" class="btn btn-primary">Modifier</button>
+        <div class="mb-2">
+
+            <button type="submit" class="btn btn-primary">Modifier</button>
+        </div>
 
 
     </form>
 </div>
+
+<?php
+include_once('footer.php');
+?>

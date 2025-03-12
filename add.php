@@ -99,6 +99,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // var_dump($errors['image']);
             ?>
         </div>
-        <button type="submit" class="btn btn-primary">Ajouter</button>
+        <div class="mb-2">
+
+            <button type="submit" class="btn btn-primary">Ajouter</button>
+        </div>
     </form>
 </div>
+<?php
+include_once('footer.php');
+?>

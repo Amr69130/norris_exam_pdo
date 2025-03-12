@@ -5,7 +5,7 @@ if (!isset($_SESSION["username"])) {
     header("Location: index.php");
 }
 //verif presence ID url
-var_dump($_GET['id']);
+// var_dump($_GET['id']);
 
 
 require('connectDB.php');
@@ -20,7 +20,7 @@ $requete->execute([
 
 $car = $requete->fetch();
 //verif  si resultat
-var_dump($car);
+// var_dump($car);
 if ($car === false) {
 
     header('location: admin.php');
@@ -42,12 +42,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 ?>
 
 
+<div class="cars-container">
+    <p class="text-danger fw-bold">ATTENTION <?= ucwords(strtolower($_SESSION['username'])) ?>, êtes vous certain de
+        vouloir supprimer le
+        véhicule :
+        <?= $car['brand'] . " " . $car['model'] ?> ?
+    </p>
+    <img src="images/<?php echo $car['image']; ?>" style="width: 200px; height: 200px;" alt="Car Image">
 
 
-<form method="POST" action="delete.php?id=<?= $_GET['id'] ?>">
-    <button class="btn btn-danger">SUPPRIMER</button>
-    <button class="btn btn-secondary" formaction="admin.php">ANNULER</button>
-</form>
+
+
+
+
+    <form method="POST" action="delete.php?id=<?= $_GET['id'] ?>">
+        <button class="btn btn-danger">SUPPRIMER</button>
+        <button class="btn btn-secondary" formaction="admin.php">ANNULER</button>
+    </form>
+</div>
+
 
 
 <?php
