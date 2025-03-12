@@ -47,16 +47,41 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 
     if (empty($errors)) {
-        $request = $pdo->prepare("UPDATE car SET model = :model, brand = :brand, horsePower = :horsePower, image = :image WHERE id = :id;");
+        if (isset($_FILES["image"])) {
+            if ($_FILES['image']['error'] == 0) {
 
-        var_dump($_POST);
-        $request->execute([
-            ":model" => $_POST['model'],
-            ":brand" => $_POST['brand'],
-            ":horsePower" => $_POST['horsePower'],
-            ":image" => $_POST['image'],
-            ":id" => $car['id']
-        ]);
+
+                // Etape 2
+                if ($_FILES['image']['size'] <= 100000000) {
+                    //Etape 3
+
+                    $extensions_autorisees = array('image/jpg', 'image/jpeg', 'image/gif', 'image/png');
+                    $extension = $_FILES['image']['type'];
+                    if (in_array($extension, $extensions_autorisees)) {
+                        //Etape 4
+                        $image_url = uniqid() . $_FILES['image']['name'];
+                        move_uploaded_file($_FILES['image']['tmp_name'], 'img/' . $image_url);
+
+                        unlink("img/" . $car["image"]);
+                        $request = $pdo->prepare("UPDATE car SET model = :model, brand = :brand, horsePower = :horsePower, image = :image WHERE id = :id;");
+
+                        var_dump($_POST);
+                        $request->execute([
+                            ":model" => $_POST['model'],
+                            ":brand" => $_POST['brand'],
+                            ":horsePower" => $_POST['horsePower'],
+                            ":image" => $_POST['image'],
+                            ":id" => $car['id']
+                        ]);
+                        echo "L'envoi a bien été effectué !";
+                    } else {
+                        echo ('J\'accepte que les jpg, jpeg, gif, png');
+                    }
+                } else {
+                    echo ('le fichier est trop lourd 1MB max');
+                }
+            }
+        }
         // var_dump('okay');
         header("location: admin.php");
     }
@@ -74,7 +99,7 @@ require_once('header.php');
 
 <div class="container text-center">
     <h2 class="mb-4">Modifier une Voiture</h2>
-    <form action="update.php?id=<?= $car['id'] ?>" method="POST">
+    <form action="update.php?id=<?= $car['id'] ?>" method="POST" enctype="multipart/form-data">
 
 
         <div class="mb-3">
@@ -112,7 +137,11 @@ require_once('header.php');
         </div>
         <div class="mb-3">
             <label for="image" class="form-label">Image du véhicule</label>
-            <input type="text" class="form-control" name="image" id="image" value="<?= $car['image'] ?>">
+
+
+
+
+            <input type="file" class="form-control" name="image" id="image" value="<?= $car['image'] ?>">
             <?php if (isset($errors['image'])): ?>
                 <p class="text-danger"><?= $errors['image'] ?></p>
                 <?php
