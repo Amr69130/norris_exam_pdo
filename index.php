@@ -5,7 +5,7 @@ require_once('functions.php');
 require('connectDB.php');
 
 $pdo = connectDB();
-var_dump($pdo);
+// var_dump($pdo);
 
 selectAllCars();
 $cars = selectAllCars();
